@@ -31,7 +31,7 @@ function App() {
   const [connecProb, setIsConnecProb] = useState(navigator.onLine);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
-  const loadingTimeoutThreshold = 2000;
+  const loadingTimeoutThreshold = 10000;
 
   const searchCity = useCallback(
     async (city) => {
