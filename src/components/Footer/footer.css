@@ -1,0 +1,26 @@
+.footer {
+  height: auto;
+  margin: 0;
+  background-image: linear-gradient(to right, rgb(250, 249, 249) 10%, #f5f5f583);
+  color: #333d01;
+  border-top: 2px solid #ffffff;
+  backdrop-filter: blur(3px);
+}
+.footer_logo {
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
+@media (max-width: 768px) {
+  .footer_logo {
+    width: 100px;
+    height: auto;
+     mix-blend-mode: multiply;
+  filter: contrast(1);
+  }
+  .footer h4 {
+    font-size: 13px !important;
+  }
+}

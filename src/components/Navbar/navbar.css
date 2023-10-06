@@ -1,0 +1,47 @@
+.navbar {
+  height: 90px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  overflow: hidden;
+  background-image: linear-gradient(
+    to right,
+    #ffffff,
+    #617F97 25%,
+    transparent
+  );
+  box-shadow: 0 0 10px 0px #012e43;
+  padding: 0 !important;
+  backdrop-filter: blur(10px);
+}
+.logo {
+  height: 100px;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
+@media screen and (max-width: 800px) {
+  .navbar{
+    background-image: linear-gradient(
+    to right,
+    #ffffff,
+    #012e43 35%,
+    transparent
+  );
+  }
+  .logo {
+    height: 60px;
+    border: none;
+    box-shadow: none;
+  }
+}
+.searchIcon {
+  position: absolute;
+  top: 20%;
+  right: 3%;
+}
+.langToggler {
+  position: absolute;
+  top: 20%;
+  right: 5%;
+}

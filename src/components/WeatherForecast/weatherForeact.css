@@ -1,0 +1,48 @@
+.forecast_card {
+  border: none !important;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  align-items: center;
+  height: fit-content;
+  cursor: pointer;
+    overflow: hidden;
+
+}
+.day_forecast {
+  font-size: 17px;
+  color: #fff;
+  border-radius: 20px;
+  padding: 2px 5px;
+  margin: 0;
+  text-align: center;
+}
+.clicked-day{
+  border: 2px solid #fff;
+  background-color: rgba(240, 248, 255, 0.103) !important;
+}
+.temperature{
+  white-space: nowrap;
+}
+.min_temp,
+.max_temp {
+  color: #fff;
+  white-space: nowrap;
+}
+.weather_desc {
+  color: beige;
+  font-weight: bold;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+@media (max-width:760px) {
+  .day_forecast{
+    font-size: 11px !important;
+  }
+  .hour_card{
+    margin: 0 5px !important;
+  }
+  .hour_card .hour_time, .hour_card .hour_temp{
+    font-size: 10px !important;
+  }
+}

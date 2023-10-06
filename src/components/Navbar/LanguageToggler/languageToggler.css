@@ -1,0 +1,41 @@
+.languageToggler {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 25px;
+  color: #000000;
+  background-color: #617f97;
+  width: fit-content;
+  padding: 0 3px;
+  border-radius: 5px;
+}
+.languageToggler:hover,
+.languageTogglerText:hover {
+  color: orange;
+  transition: 0.3s ease;
+}
+
+.languageTogglerIcon {
+  font-size: 20px;
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.languageTogglerText {
+  font-size: 20px;
+ color: #ffffffd5;
+  font-weight: bold;
+  background-color: transparent !important;
+  border: none;
+  padding: 0 10px;
+}
+.disabledToggler {
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: transparent !important;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+}

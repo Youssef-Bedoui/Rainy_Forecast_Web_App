@@ -1,0 +1,39 @@
+.hourly_container {
+  background-image: linear-gradient(15deg, #0a18209d 0%, #0c0e0d9c 100%);
+  backdrop-filter: blur(2px);
+  padding: 5px;
+  height: 130px;
+  margin: 5px auto;
+  overflow-x: scroll;
+  /* overflow-y: hidden; */
+  color: #ffffff;
+}
+
+
+.hourly_container::-webkit-scrollbar {
+  display: none;
+}
+
+.hour_icon {
+  height: 40px;
+  width: 40px;
+}
+.current_hour {
+  background-color: rgba(240, 248, 255, 0.329);
+  padding: 5px;
+  border-radius: 5px;
+  transform: scale(1.05);
+}
+.leftArrow, .rightArrow{
+position: absolute;
+top:40%;
+z-index: 5;
+cursor: pointer;
+color: #fff;
+}
+.leftArrow{
+  left: 10px;
+}
+.rightArrow{
+  right: 10px;
+}
