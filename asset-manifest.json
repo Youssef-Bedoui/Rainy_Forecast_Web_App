@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Rainy_Forecast_Web_App/static/css/main.e4d52f16.css",
-    "main.js": "/Rainy_Forecast_Web_App/static/js/main.a22482aa.js",
+    "main.js": "/Rainy_Forecast_Web_App/static/js/main.a8de59f2.js",
     "static/media/android_weather_app.jpg": "/Rainy_Forecast_Web_App/static/media/android_weather_app.336a15c274cb68c5e467.jpg",
     "static/media/pressure.png": "/Rainy_Forecast_Web_App/static/media/pressure.00f5e6c3b5894b70a28f.png",
     "static/media/puddle.png": "/Rainy_Forecast_Web_App/static/media/puddle.4881a695b83a874d7de6.png",
@@ -13,10 +13,10 @@
     "static/media/weatherapi_logo.webp": "/Rainy_Forecast_Web_App/static/media/weatherapi_logo.5db652b2f46b1cf8ab7d.webp",
     "index.html": "/Rainy_Forecast_Web_App/index.html",
     "main.e4d52f16.css.map": "/Rainy_Forecast_Web_App/static/css/main.e4d52f16.css.map",
-    "main.a22482aa.js.map": "/Rainy_Forecast_Web_App/static/js/main.a22482aa.js.map"
+    "main.a8de59f2.js.map": "/Rainy_Forecast_Web_App/static/js/main.a8de59f2.js.map"
   },
   "entrypoints": [
     "static/css/main.e4d52f16.css",
-    "static/js/main.a22482aa.js"
+    "static/js/main.a8de59f2.js"
   ]
 }
