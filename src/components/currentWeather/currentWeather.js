@@ -13,12 +13,12 @@ import { GrFormRefresh } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 const CurrentWeather = ({ city }) => {
   const { t, i18n } = useTranslation();
   const [icon, setIcon] = useState(null);
   const [temp, setTemp] = useState(null);
-  const [feelsLike, setFeelsLike] = useState(null);
   const [weather, setWeather] = useState(null);
   const [precip, setPrecip] = useState(null);
   const [windSpd, setWindSpd] = useState(null);
@@ -26,7 +26,10 @@ const CurrentWeather = ({ city }) => {
   const [pression, setPression] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
-  const [resreshAlert, setRefreshAlert] = useState(false);
+  const [feelsLike, setFeelsLike] = useState(null);
+  const [refreshAlert, setRefreshAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [refreshErrorAlert, setRefreshErrorAlert] = useState(false); // Added error alert for refresh failures
 
   const getCurrWeather = useCallback(async () => {
     try {
@@ -45,8 +48,16 @@ const CurrentWeather = ({ city }) => {
         setPression(data.pressure_mb);
         setHumidity(data.humidity);
         setLastUpdate(data.last_updated);
+        setErrorAlert(false);
+        setRefreshErrorAlert(false); 
+        handleAlertSuccess();
+      } else {
+        setErrorAlert(true);
+        handleRefreshError();
       }
     } catch (error) {
+      setErrorAlert(true);
+      handleRefreshError();
       console.log(error);
     }
   }, [city, i18n.resolvedLanguage]);
@@ -55,6 +66,13 @@ const CurrentWeather = ({ city }) => {
     setRefreshAlert(true);
     setTimeout(() => {
       setRefreshAlert(false);
+    }, 3000);
+  };
+
+  const handleRefreshError = () => {
+    setRefreshErrorAlert(true);
+    setTimeout(() => {
+      setRefreshErrorAlert(false);
     }, 3000);
   };
 
@@ -75,25 +93,33 @@ const CurrentWeather = ({ city }) => {
               <i
                 onClick={() => {
                   getCurrWeather();
-                  handleAlertSuccess();
                 }}
               >
                 <GrFormRefresh
-                  className={`refresh ${resreshAlert ? "rotating" : ""}`}
+                  className={`refresh ${refreshAlert ? "rotating" : ""}`}
                 />
               </i>
             </h2>
             <div className="d-flex flex-column justify-content-center align-items-center ">
-              <div className="d-flex justify-content-center align-items-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1 }}
+                className="d-flex justify-content-center align-items-center"
+              >
                 <img className="mainWeatherIcon" src={icon} alt={weather} />
                 <p className="curr_temp m-0">
                   {temp}
                   {t("c")}
                 </p>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 1 }}
+              >
                 <p className="weather m-0">{weather}</p>
-              </div>
+              </motion.div>
             </div>
           </div>
           <div className="col-md-8">
@@ -101,8 +127,7 @@ const CurrentWeather = ({ city }) => {
               <p className="lastUpdate">
                 {t("lastUpd")} : {Moment(lastUpdate).format("LLLL")}
               </p>
-              {/*success refresh alert */}
-              {resreshAlert && (
+              {refreshAlert && (
                 <Alert
                   variant="filled"
                   severity="success"
@@ -124,70 +149,156 @@ const CurrentWeather = ({ city }) => {
                   {t("dataRefreshed")}
                 </Alert>
               )}
+              {refreshErrorAlert && (
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  iconMapping={{
+                    error: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                    width: "fit-content",
+                    height: "30px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {t("refreshError")}
+                </Alert>
+              )}
+              {errorAlert && !refreshErrorAlert && (
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  iconMapping={{
+                    error: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                    width: "fit-content",
+                    height: "30px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {t("dataError")}
+                </Alert>
+              )}
             </div>
             <div className="d-flex flex-row justify-content-center align-items-center flex-wrap">
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img
-                  className="currWeatherIcon"
-                  src={feelImg}
-                  alt={t("feels")}
-                />
-                <p className="weather_data">
-                  {feelsLike}
-                  {t("c")}
-                </p>
-                <h6 className="detail_title">{t("feels")}</h6>
-              </div>
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img
-                  className="currWeatherIcon"
-                  src={precipImg}
-                  alt={t("precip")}
-                />
-                <p className="weather_data">
-                  {precip}
-                  {t("mm")}
-                </p>
-                <h6 className="detail_title">{t("precip")}</h6>
-              </div>
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img
-                  className="currWeatherIcon"
-                  src={windSpdImg}
-                  alt={t("windSpd")}
-                />
-                <p className="weather_data">
-                  {windSpd}
-                  {t("kph")}
-                </p>
-                <h6 className="detail_title">{t("windSpd")}</h6>
-              </div>
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img
-                  className="currWeatherIcon"
-                  src={WindDirImg}
-                  alt={t("windDrc")}
-                />
-                <p className="weather_data">{windDir}</p>
-                <h6 className="detail_title">{t("windDrc")}</h6>
-              </div>
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img
-                  className="currWeatherIcon"
-                  src={pressImg}
-                  alt={t("press")}
-                />
-                <p className="weather_data">
-                  {pression}
-                  {t("mb")}
-                </p>
-                <h6 className="detail_title">{t("press")}</h6>
-              </div>
-              <div className="statis_card d-flex flex-column justify-content-center align-items-center mx-2">
-                <img className="currWeatherIcon" src={humImg} alt={t("humd")} />
-                <p className="weather_data">{humidity}%</p>
-                <h6 className="detail_title">{t("humd")}</h6>
-              </div>
+              <AnimatePresence>
+                <motion.div
+                  key="feels-like"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={feelImg}
+                    alt={t("feels")}
+                  />
+                  <p className="weather_data">
+                    {feelsLike}
+                    {t("c")}
+                  </p>
+                  <h6 className="detail_title">{t("feels")}</h6>
+                </motion.div>
+                <motion.div
+                  key="precip"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={precipImg}
+                    alt={t("precip")}
+                  />
+                  <p className="weather_data">
+                    {precip}
+                    {t("mm")}
+                  </p>
+                  <h6 className="detail_title">{t("precip")}</h6>
+                </motion.div>
+                <motion.div
+                  key="wind-speed"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={windSpdImg}
+                    alt={t("windSpd")}
+                  />
+                  <p className="weather_data">
+                    {windSpd}
+                    {t("kph")}
+                  </p>
+                  <h6 className="detail_title">{t("windSpd")}</h6>
+                </motion.div>
+                <motion.div
+                  key="wind-direction"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={WindDirImg}
+                    alt={t("windDrc")}
+                  />
+                  <p className="weather_data">{windDir}</p>
+                  <h6 className="detail_title">{t("windDrc")}</h6>
+                </motion.div>
+                <motion.div
+                  key="pressure"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={pressImg}
+                    alt={t("press")}
+                  />
+                  <p className="weather_data">
+                    {pression}
+                    {t("mb")}
+                  </p>
+                  <h6 className="detail_title">{t("press")}</h6>
+                </motion.div>
+                <motion.div
+                  key="humidity"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="statis_card d-flex flex-column justify-content-center align-items-center mx-2"
+                >
+                  <img
+                    className="currWeatherIcon"
+                    src={humImg}
+                    alt={t("humd")}
+                  />
+                  <p className="weather_data">{humidity}%</p>
+                  <h6 className="detail_title">{t("humd")}</h6>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>

@@ -28,6 +28,7 @@ i18next
           rightsReserved: "All rights reserved for Rainy Forecast",
           codedAndDesignedBy: "Coded and designed by Youssef Bedoui",
           currentWeather: "Current Weather",
+          dataError: "Refresh Error !",
         },
       },
       ar: {
@@ -49,7 +50,8 @@ i18next
           poweredBy: "بتقديم من API الطقس",
           rightsReserved: "جميع الحقوق محفوظة لـ Rainy Forecast",
           codedAndDesignedBy: "تصميم وتنفيذ: يوسف البدوي",
-          currentWeather : "الطقس حاليا"
+          currentWeather: "الطقس حاليا",
+          dataError : "تعذر التحديث"
         },
       },
     },

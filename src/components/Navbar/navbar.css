@@ -1,9 +1,8 @@
 .navbar {
-  height: 90px;
+  height: auto;
   position: sticky;
   top: 0;
   z-index: 5;
-  overflow: hidden;
   background-image: linear-gradient(
     to right,
     #ffffff,
@@ -45,3 +44,11 @@
   top: 20%;
   right: 5%;
 }
+@media (max-width:400px) {
+  .langToggler {
+  position: absolute;
+  top: 20%;
+  right: 20%;
+}
+}
+
