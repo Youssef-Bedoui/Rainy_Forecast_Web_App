@@ -31,13 +31,14 @@
 
 @media (max-width:700px) {
     .searchBar{
+        height: 100vh;
         position: fixed;
-        top: 90px;
+        top: 60px;
         right: 0;
-        bottom: 0;
         left: 0;
+        bottom: 0;
         z-index: 3;
-        background-color: rgba(0, 0, 0, 0.479);
+        background-color: rgba(0, 0, 0, 0.664);
         display: flex;
         justify-content: center;
         align-items: center;
