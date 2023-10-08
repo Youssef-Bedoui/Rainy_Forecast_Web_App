@@ -7,7 +7,7 @@ function SearchBar({ searchCity, isSearch, setIsSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (window.innerWidth <= 768) {
       setIsSearch(false);
     }
@@ -18,22 +18,23 @@ function SearchBar({ searchCity, isSearch, setIsSearch }) {
   };
 
   const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value);  
   };
 
   return (
-    <form className="searchBar" onSubmit={handleSearch}>
+    <div className="searchBar" onClick={() => handleSearch()}>
       <input
         className="searchInput"
         type="text"
         placeholder={t("enterCity")}
         value={searchTerm}
         onChange={handleInputChange}
+        onClick={(e) => e.stopPropagation()} 
       />
       <button className="search_btn" type="submit">
         {t("search")}
       </button>
-    </form>
+    </div>
   );
 }
 
