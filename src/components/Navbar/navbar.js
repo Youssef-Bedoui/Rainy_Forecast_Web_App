@@ -51,7 +51,7 @@ function Navbar({ city, searchCity }) {
         </div>
 
         {isSearch && (
-          <div className="mx-auto position-fixed top-90">
+          <div className="mx-auto">
             <SearchBar city={city} searchCity={searchCity} isSearch={isSearch} setIsSearch={setIsSearch} />
           </div>
         )}
