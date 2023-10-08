@@ -7,7 +7,7 @@ function SearchBar({ searchCity, isSearch, setIsSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     if (window.innerWidth <= 768) {
       setIsSearch(false);
     }
