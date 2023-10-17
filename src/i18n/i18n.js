@@ -46,7 +46,7 @@ i18next
           kph: "كم/س",
           mb: "مليبار",
           lastUpd: "أخر تحديث",
-          dataRefreshed: "تم تحديث الطقس بنجاح",
+          dataRefreshed: "تم تحديث الطقس",
           poweredBy: "بتقديم من API الطقس",
           rightsReserved: "جميع الحقوق محفوظة لـ Rainy Forecast",
           codedAndDesignedBy: "تصميم وتنفيذ: يوسف البدوي",

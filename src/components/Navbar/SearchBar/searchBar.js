@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "./searchBar.css";
 import { useTranslation } from "react-i18next";
 
-function SearchBar({ searchCity, isSearch, setIsSearch }) {
-  const {t}= useTranslation();
+function SearchBar({ searchCity, setIsSearch }) {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (window.innerWidth <= 768) {
       setIsSearch(false);
     }
@@ -18,20 +18,25 @@ function SearchBar({ searchCity, isSearch, setIsSearch }) {
   };
 
   const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);  
+    setSearchTerm(e.target.value);
+    localStorage.setItem("lastCity", e.target.value);
   };
 
   return (
-    <div className="searchBar" onClick={() => handleSearch()}>
+    <div className="searchBar">
       <input
         className="searchInput"
         type="text"
         placeholder={t("enterCity")}
         value={searchTerm}
         onChange={handleInputChange}
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()}
       />
-      <button className="search_btn" type="submit">
+      <button
+        className="search_btn"
+        type="submit"
+        onClick={() => handleSearch()}
+      >
         {t("search")}
       </button>
     </div>

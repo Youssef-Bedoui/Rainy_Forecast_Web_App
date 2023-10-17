@@ -14,6 +14,7 @@ import "moment/locale/ar-tn";
 import moment from "moment";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import axios from "axios";
 
 function App() {
   const { i18n } = useTranslation();
@@ -29,16 +30,12 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [connecProb, setIsConnecProb] = useState(navigator.onLine);
-  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
-
-  const loadingTimeoutThreshold = 10000;
 
   const searchCity = useCallback(
     async (city) => {
       try {
         setLoading(true);
         setIsError(false);
-        setLoadingTimedOut(false);
 
         const response = await api.get(
           `forecast.json?&key=${config.API_KEY}&q=${city}&days=3&lang=${i18n.resolvedLanguage}`
@@ -55,10 +52,7 @@ function App() {
           setTemp(responseData.current.temp_c);
           setError(null);
           setCity(responseData.location.name);
-          localStorage.setItem(
-            "lastdata.location.name",
-            responseData.location.name
-          );
+          localStorage.setItem("lastCity", responseData.location.name);
         } else {
           setLoading(false);
           setData([]);
@@ -70,6 +64,7 @@ function App() {
         console.error(error);
         setLoading(false);
         setIsError(true);
+        setIsConnecProb(true);
       }
     },
     [i18n.resolvedLanguage]
@@ -102,9 +97,16 @@ function App() {
         searchCity(savedCity);
         setLoading(false);
       } else {
-        console.error("Geolocation is not supported by this browser.");
-        setIsError(true);
-        setError("No internet connection.");
+        axios
+          .get("https://ipinfo.io/json")
+          .then((response) => {
+            const { city } = response.data;
+            setCity(city);
+            localStorage.setItem("lastCity", city);
+          })
+          .catch((error) => {
+            console.error("Error fetching city based on IP:", error);
+          });
         setLoading(false);
       }
     } catch (error) {
@@ -114,44 +116,38 @@ function App() {
       setLoading(false);
     }
   }, [searchCity]);
+useEffect(() => {
+  Moment.locale("en");
 
-  useEffect(() => {
-    Moment.locale("en");
+  fetchUserCity();
+}, [fetchUserCity, i18n.resolvedLanguage, searchCity]);
 
+useEffect(() => {
+  function onlineHandler() {
+    setIsOnline(true);
+    setLoading(false);
+    setIsError(false);
+    setError(null);
+    setIsConnecProb(false);
     fetchUserCity();
-  }, [fetchUserCity, i18n.resolvedLanguage, searchCity]);
+  }
 
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      if(!data.length){setLoadingTimedOut(true);}
-    }, loadingTimeoutThreshold);
+  function offlineHandler() {
+    setIsOnline(false);
+    setLoading(false);
+    setIsError(true);
+    setError("No Connection");
+    setIsConnecProb(true);
+  }
 
-    function onlineHandler() {
-      setIsOnline(true);
-      setLoading(false);
-      setIsError(false);
-      setError(null);
-      setIsConnecProb(false);
-      fetchUserCity();
-    }
+  window.addEventListener("online", onlineHandler);
+  window.addEventListener("offline", offlineHandler);
 
-    function offlineHandler() {
-      setIsOnline(false);
-      setLoading(false);
-      setIsError(true);
-      setError("No Connection");
-      setIsConnecProb(true);
-    }
-
-    window.addEventListener("online", onlineHandler);
-    window.addEventListener("offline", offlineHandler);
-
-    return () => {
-      clearTimeout(loadingTimeout);
-      window.removeEventListener("online", onlineHandler);
-      window.removeEventListener("offline", offlineHandler);
-    };
-  }, [data.length, fetchUserCity, isError, loadingTimeoutThreshold]);
+  return () => {
+    window.removeEventListener("online", onlineHandler);
+    window.removeEventListener("offline", offlineHandler);
+  };
+}, [data.length, fetchUserCity, isError]);
 
   useEffect(() => {
     if (city) {
@@ -181,13 +177,7 @@ function App() {
   return (
     <div className="App">
       <Navbar city={city} searchCity={searchCity} />
-      {loadingTimedOut ? (
-        <Error
-          error="Loading timed out"
-          connecProb={connecProb}
-          fetch={fetchUserCity}
-        />
-      ) : loading ? (
+      { loading ? (
         <Box
           display="flex"
           justifyContent="center"

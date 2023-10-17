@@ -16,23 +16,19 @@ function Navbar({ city, searchCity }) {
     isSearch ? setIsSearch(false) : setIsSearch(true);
   };
 
-  // Add an effect to check the screen size and set isSearch accordingly
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 700) {
         setIsSearch(false);
       } else {
         setIsSearch(true);
       }
     };
 
-    // Initial check on component mount
     handleResize();
 
-    // Add event listener for screen size changes
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -40,7 +36,7 @@ function Navbar({ city, searchCity }) {
 
   return (
     <nav className="navbar navbar-expand-lg">
-      <div className="container-fluid">
+      <div className="container-fluid nav_container">
         <img src={logo} className="logo" alt="Rainy forecast" />
 
         <div
