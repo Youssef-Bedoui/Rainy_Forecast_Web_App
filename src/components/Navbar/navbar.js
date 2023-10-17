@@ -46,15 +46,15 @@ function Navbar({ city, searchCity }) {
           <TravelExploreIcon style={iconStyle} />
         </div>
 
+        
+        <div className="langToggler nav-item">
+        <LanguageToggler />
+        </div>
         {isSearch && (
           <div className="mx-auto">
             <SearchBar city={city} searchCity={searchCity} isSearch={isSearch} setIsSearch={setIsSearch} />
           </div>
         )}
-
-        <div className="langToggler nav-item">
-          <LanguageToggler />
-        </div>
       </div>
     </nav>
   );
