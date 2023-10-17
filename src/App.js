@@ -116,38 +116,38 @@ function App() {
       setLoading(false);
     }
   }, [searchCity]);
-useEffect(() => {
-  Moment.locale("en");
+  useEffect(() => {
+    Moment.locale("en");
 
-  fetchUserCity();
-}, [fetchUserCity, i18n.resolvedLanguage, searchCity]);
-
-useEffect(() => {
-  function onlineHandler() {
-    setIsOnline(true);
-    setLoading(false);
-    setIsError(false);
-    setError(null);
-    setIsConnecProb(false);
     fetchUserCity();
-  }
+  }, [fetchUserCity, i18n.resolvedLanguage, searchCity]);
 
-  function offlineHandler() {
-    setIsOnline(false);
-    setLoading(false);
-    setIsError(true);
-    setError("No Connection");
-    setIsConnecProb(true);
-  }
+  useEffect(() => {
+    function onlineHandler() {
+      setIsOnline(true);
+      setLoading(false);
+      setIsError(false);
+      setError(null);
+      setIsConnecProb(false);
+      fetchUserCity();
+    }
 
-  window.addEventListener("online", onlineHandler);
-  window.addEventListener("offline", offlineHandler);
+    function offlineHandler() {
+      setIsOnline(false);
+      setLoading(false);
+      setIsError(true);
+      setError("No Connection");
+      setIsConnecProb(true);
+    }
 
-  return () => {
-    window.removeEventListener("online", onlineHandler);
-    window.removeEventListener("offline", offlineHandler);
-  };
-}, [data.length, fetchUserCity, isError]);
+    window.addEventListener("online", onlineHandler);
+    window.addEventListener("offline", offlineHandler);
+
+    return () => {
+      window.removeEventListener("online", onlineHandler);
+      window.removeEventListener("offline", offlineHandler);
+    };
+  }, [data.length, fetchUserCity, isError]);
 
   useEffect(() => {
     if (city) {
@@ -177,7 +177,7 @@ useEffect(() => {
   return (
     <div className="App">
       <Navbar city={city} searchCity={searchCity} />
-      { loading ? (
+      {loading ? (
         <Box
           display="flex"
           justifyContent="center"

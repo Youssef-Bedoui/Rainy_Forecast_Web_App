@@ -32,6 +32,7 @@ function Navbar({ city, searchCity }) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+
   }, []);
 
   return (
@@ -52,7 +53,7 @@ function Navbar({ city, searchCity }) {
         </div>
         {isSearch && (
           <div className="mx-auto">
-            <SearchBar city={city} searchCity={searchCity} isSearch={isSearch} setIsSearch={setIsSearch} />
+            <SearchBar city={city} searchCity={searchCity} setIsSearch={setIsSearch} />
           </div>
         )}
       </div>
