@@ -32,7 +32,7 @@
 @media (max-width:700px) {
     .searchBar{
         height: 100vh;
-        position: fixed;
+        position: absolute;
         top: 60px;
         right: 0;
         left: 0;
