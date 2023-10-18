@@ -29,7 +29,7 @@ const CurrentWeather = ({ city }) => {
   const [feelsLike, setFeelsLike] = useState(null);
   const [refreshAlert, setRefreshAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
-  const [refreshErrorAlert, setRefreshErrorAlert] = useState(false); // Added error alert for refresh failures
+  const [refreshErrorAlert, setRefreshErrorAlert] = useState(false); 
 
   const getCurrWeather = useCallback(async () => {
     try {

@@ -10,8 +10,8 @@ function LanguageToggler() {
   // i18next
   const { i18n } = useTranslation();
   const languages = {
-    en: { name: "English" },
-    ar: { name: "العربية" },
+    en: { name: "En" },
+    ar: { name: "ع" },
   };
 
   const handleLanguageToggle = (lang) => {
@@ -23,7 +23,7 @@ function LanguageToggler() {
   }, []);
 
   return (
-    <div className="languageToggler">
+    <div className="languageToggler ">
       <i className="fs-2">
         <IoLanguageSharp />
       </i>

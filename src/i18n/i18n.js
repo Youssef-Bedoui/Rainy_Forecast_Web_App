@@ -23,7 +23,7 @@ i18next
           kph: "Kph",
           mb: "mb",
           lastUpd: "Last update",
-          dataRefreshed: "Weather Data refreshed",
+          dataRefreshed: "Weather refreshed",
           poweredBy: "Powered by Weather API",
           rightsReserved: "All rights reserved for Rainy Forecast",
           codedAndDesignedBy: "Coded and designed by Youssef Bedoui",

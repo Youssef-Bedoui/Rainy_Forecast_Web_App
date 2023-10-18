@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import "./searchBar.css";
 import { useTranslation } from "react-i18next";
 
-function SearchBar({ searchCity, setIsSearch }) {
+function SearchBar({ searchCity }) {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
-    if (window.innerWidth <= 768) {
-      setIsSearch(false);
-    }
-
     if (searchTerm.trim() !== "") {
       searchCity(searchTerm);
     }

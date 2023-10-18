@@ -1,5 +1,6 @@
 .languageToggler {
   display: flex;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
   font-size: 25px;
@@ -8,6 +9,7 @@
   width: fit-content;
   padding: 0 3px;
   border-radius: 5px;
+  margin-right: 5px;
 }
 .languageToggler:hover,
 .languageTogglerText:hover {
@@ -17,10 +19,7 @@
 
 .languageTogglerIcon {
   font-size: 20px;
-  margin-right: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  
 }
 
 .languageTogglerText {

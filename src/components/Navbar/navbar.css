@@ -6,32 +6,35 @@
   background-image: linear-gradient(
     to right,
     #ffffff,
-    #617F97 25%,
+    #617f97 25%,
     transparent
   );
   box-shadow: 0 0 10px 0px #012e43;
   padding: 0 !important;
   backdrop-filter: blur(10px);
 }
-.nav_container{
+.nav_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap !important;
+  padding: 0;
 }
 .logo {
   height: 100px;
+  object-fit: contain;
   mix-blend-mode: multiply;
   filter: contrast(1);
 }
 
-@media screen and (max-width: 800px) {
-  .navbar{
+@media (max-width: 800px) {
+  .navbar {
     background-image: linear-gradient(
-    to right,
-    #ffffff,
-    #012e43 35%,
-    transparent
-  );
+      to right,
+      #ffffff,
+      #012e43 35%,
+      transparent
+    );
   }
   .logo {
     height: 60px;
@@ -39,22 +42,14 @@
     box-shadow: none;
   }
 }
-.searchIcon {
-  position: fixed;
-  top: 20%;
-  right: 3%;
-  margin-left: 20px;
-}
-.langToggler {
-  position: absolute;
-  top: 20%;
-  right: 5%;
-}
-@media (max-width:700px) {
-  .langToggler {
-  position: absolute;
-  top: 20%;
-  right: 20%;
-}
-}
 
+.langToggler {
+  margin-right: 5px;
+}
+@media (max-width: 700px) {
+  .langToggler {
+    position: absolute;
+    top: 20%;
+    right: 20%;
+  }
+}
