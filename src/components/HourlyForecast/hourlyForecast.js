@@ -8,6 +8,7 @@ function HourlyForecast({ hourlyData, dayIndex }) {
   const [filteredData, setFilteredData] = useState([]);
   const [scrollLeft, setScrollLeft] = useState(0); // Track scroll position
   const currentHourRef = useRef(null);
+  const hourlyContainerRef = useRef(null); // Create a ref for the hourly container
 
   useEffect(() => {
     // Filter the hourly data for the current day
@@ -38,28 +39,34 @@ function HourlyForecast({ hourlyData, dayIndex }) {
     }
   }, [filteredData]);
 
-const handleScrollLeft = () => {
-  const container = document.querySelector(".hourly_container");
-  if (container) {
-    container.scrollTo({
-      left: container.scrollLeft - 100, // Scroll left by 100px
-      behavior: "smooth", // Add smooth scrolling behavior
-    });
-    setScrollLeft(container.scrollLeft);
-  }
-};
+  const handleScrollLeft = () => {
+    if (hourlyContainerRef.current) {
+      const { scrollLeft, clientWidth, scrollWidth } =
+        hourlyContainerRef.current;
+      const newScrollLeft = scrollLeft - clientWidth;
+      hourlyContainerRef.current.scrollTo({
+        left: newScrollLeft > 0 ? newScrollLeft : 0, // Ensure scrollLeft is not less than 0
+        behavior: "smooth",
+      });
+      setScrollLeft(newScrollLeft);
+    }
+  };
 
-const handleScrollRight = () => {
-  const container = document.querySelector(".hourly_container");
-  if (container) {
-    container.scrollTo({
-      left: container.scrollLeft + 100, // Scroll right by 100px
-      behavior: "smooth", // Add smooth scrolling behavior
-    });
-    setScrollLeft(container.scrollLeft);
-  }
-};
-
+  const handleScrollRight = () => {
+    if (hourlyContainerRef.current) {
+      const { scrollLeft, clientWidth, scrollWidth } =
+        hourlyContainerRef.current;
+      const newScrollLeft = scrollLeft + clientWidth;
+      hourlyContainerRef.current.scrollTo({
+        left:
+          newScrollLeft < scrollWidth - clientWidth
+            ? newScrollLeft
+            : scrollWidth - clientWidth, // Ensure scrollLeft is not greater than scrollWidth - clientWidth
+        behavior: "smooth",
+      });
+      setScrollLeft(newScrollLeft);
+    }
+  };
 
   return (
     <div className="position-relative">
@@ -67,7 +74,10 @@ const handleScrollRight = () => {
         className="leftArrow"
         onClick={handleScrollLeft}
       />
-      <div className="hourly_container d-flex justify-content-center align-items-center overflow-scroll">
+      <div
+        className="hourly_container d-flex justify-content-center align-items-center overflow-scroll"
+        ref={hourlyContainerRef} // Attach the ref to the hourly container
+      >
         {filteredData?.map((hour, index) => (
           <div
             className={`hour_card d-flex flex-column justify-content-center align-items-center mx-3 ${
