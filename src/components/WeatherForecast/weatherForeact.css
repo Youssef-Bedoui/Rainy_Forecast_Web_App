@@ -2,47 +2,56 @@
   border: none !important;
   display: flex;
   flex-direction: column;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
   height: fit-content;
   cursor: pointer;
-    overflow: hidden;
-
+  overflow: hidden;
+  width: 100%;
 }
-.day_forecast {
+.day {
   font-size: 17px;
   color: #fff;
   border-radius: 20px;
-  padding: 2px 5px;
+  padding: 3px 5px;
+  border: 2px solid #fff  ;
   margin: 0;
   text-align: center;
+  width: fit-content;
 }
-.clicked-day{
+.clicked-day {
   border: 2px solid #fff;
-  background-color: rgba(240, 248, 255, 0.103) !important;
+  background-color: rgba(0, 0, 0, 0.616) !important;
 }
-.temperature{
+.temperature {
   white-space: nowrap;
+}
+.min_temp {
+  color: #ff0000;
+}
+.max_temp {
+  color: aqua;
 }
 .min_temp,
 .max_temp {
-  color: #fff;
+  font-weight: bold;
   white-space: nowrap;
 }
 .weather_desc {
-  color: beige;
+  color: rgb(255, 154, 3);
   font-weight: bold;
   overflow: hidden;
   word-wrap: break-word;
 }
-@media (max-width:760px) {
-  .day_forecast{
+@media (max-width: 760px) {
+  .day {
     font-size: 11px !important;
   }
-  .hour_card{
+  .hour_card {
     margin: 0 5px !important;
   }
-  .hour_card .hour_time, .hour_card .hour_temp{
+  .hour_card .hour_time,
+  .hour_card .hour_temp {
     font-size: 10px !important;
   }
 }

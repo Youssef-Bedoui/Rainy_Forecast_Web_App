@@ -1,17 +1,47 @@
 .App {
   box-sizing: border-box;
- background-image: linear-gradient(
-    hsla(240, 1%, 16%, 0.486),
-    hsla(0, 0%, 0%, 0.486)
-  ), url("./assets/images/android_weather_app.jpg");  
+  background-image: 
+    url("./assets/images/android_weather_app.jpg");
   background-size: cover;
-  background-repeat: no-repeat;
+  width: 100%;
+}
+.forecast_container{
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
 }
 
-
-.day_forecast{
-  background-color: #313a4b8c;
+.forecast{
+  width: 60%;
+  margin: 20px auto;
+  margin-top: 0;
+}
+.day_forecast {
+  background-color: #313a4bc0;
   backdrop-filter: blur(1px);
   margin: 10px auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 25%;
+  position: sticky;
+  top: 110px;
+}
+@media (max-width:960px) {
+  .forecast_container{
+    display: flex;
+    flex-direction: column;
+  }
+  .day_forecast{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    position: unset;
+  }
+  .forecast{
+    width: 90%;
+    margin: 0 auto;
+  }
+
 }

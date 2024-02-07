@@ -3,6 +3,13 @@ import "./hourlyForecast.css";
 import Moment from "moment";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import precip_icon from "../../assets/icons/icons8-heavy-rain-50.png";
+import time from "../../assets/icons/time.png";
+import cond from "../../assets/icons/cond.png";
+import temp from "../../assets/icons/temp.png";
+import wind from "../../assets/icons/wind.png";
+import precip from "../../assets/icons/rain.png";
+import press from "../../assets/icons/press.png";
 
 function HourlyForecast({ hourlyData, dayIndex }) {
   const [filteredData, setFilteredData] = useState([]);
@@ -39,48 +46,35 @@ function HourlyForecast({ hourlyData, dayIndex }) {
     }
   }, [filteredData]);
 
-  const handleScrollLeft = () => {
-    if (hourlyContainerRef.current) {
-      const { scrollLeft, clientWidth, scrollWidth } =
-        hourlyContainerRef.current;
-      const newScrollLeft = scrollLeft - clientWidth;
-      hourlyContainerRef.current.scrollTo({
-        left: newScrollLeft > 0 ? newScrollLeft : 0, // Ensure scrollLeft is not less than 0
-        behavior: "smooth",
-      });
-      setScrollLeft(newScrollLeft);
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (hourlyContainerRef.current) {
-      const { scrollLeft, clientWidth, scrollWidth } =
-        hourlyContainerRef.current;
-      const newScrollLeft = scrollLeft + clientWidth;
-      hourlyContainerRef.current.scrollTo({
-        left:
-          newScrollLeft < scrollWidth - clientWidth
-            ? newScrollLeft
-            : scrollWidth - clientWidth, // Ensure scrollLeft is not greater than scrollWidth - clientWidth
-        behavior: "smooth",
-      });
-      setScrollLeft(newScrollLeft);
-    }
-  };
-
   return (
     <div className="position-relative">
-      <ArrowCircleLeftOutlinedIcon
-        className="leftArrow"
-        onClick={handleScrollLeft}
-      />
+      <div className="hourly_header flex-row d-flex justify-content-around align-items-center text-center">
+        <div className="header_item">
+          <img className="header_icon" src={time} alt="Time" />
+        </div>
+        <div className="header_item">
+          <img className="header_icon" src={cond} alt="Condition" />
+        </div>
+        <div className="header_item">
+          <img className="header_icon" src={temp} alt="Temperature" />
+        </div>
+        <div className="header_item">
+          <img className="header_icon" src={wind} alt="Wind" />
+        </div>
+        <div className="header_item">
+          <img className="header_icon" src={precip} alt="Precipitations" />
+        </div>
+        <div className="header_item">
+          <img className="header_icon" src={press} alt="Pressure" />
+        </div>
+      </div>
       <div
-        className="hourly_container d-flex justify-content-center align-items-center overflow-scroll"
+        className="hourly_container flex-column d-flex justify-content-start align-items-start"
         ref={hourlyContainerRef} // Attach the ref to the hourly container
       >
         {filteredData?.map((hour, index) => (
           <div
-            className={`hour_card d-flex flex-column justify-content-center align-items-center mx-3 ${
+            className={`hour_card d-flex justify-content-around align-items-center mx-3 ${
               isCurrentHour(hour) && "current_hour"
             }`}
             ref={isCurrentHour(hour) ? currentHourRef : null}
@@ -92,14 +86,21 @@ function HourlyForecast({ hourlyData, dayIndex }) {
               src={hour.condition.icon}
               alt={hour.condition.text}
             />
-            <h6 className="hour_temp">{hour.temp_c}</h6>
+            <h6 className="hour_temp">{hour.temp_c} °C</h6>
+            <h6 className="hour_temp">
+              {hour.wind_kph} {hour.wind_dir}
+            </h6>
+            <h6 className="precip">
+              {" "}
+              {hour.will_it_rain && (
+                <img className="precip_icon" alt="rain" src={precip_icon} />
+              )}
+              {hour.chance_of_rain} %
+            </h6>
+            <h6>{hour.pressure_mb} mb</h6>
           </div>
         ))}
       </div>
-      <ArrowCircleRightOutlinedIcon
-        className="rightArrow"
-        onClick={handleScrollRight}
-      />
     </div>
   );
 }

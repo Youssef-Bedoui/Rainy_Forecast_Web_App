@@ -194,39 +194,31 @@ function App() {
         <div>
           <CurrentWeather city={city} temp={temp} />
           <div className="forecast_container">
-            <div className="container-fluid">
-              <div className="row m-0">
-                <div className="day_forecast d-flex justify-content-around align-items-center">
-                  {date.map((day, index) => (
-                    <WeatherForecast
-                      onClick={getHourlyForecast}
-                      index={index}
-                      day={day}
-                      icon={icon[index]}
-                      minTemp={minTemp[index]}
-                      maxTemp={maxTemp[index]}
-                      weather={weather[index]}
-                      key={index}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="row">
-                {data.length ? (
-                  <HourlyForecast
-                    hourlyData={selectedHourlyData}
-                    dayIndex={dayIndex}
+              <div className="day_forecast">
+                {date.map((day, index) => (
+                  <WeatherForecast
+                    onClick={getHourlyForecast}
+                    index={index}
+                    day={day}
+                    icon={icon[index]}
+                    minTemp={minTemp[index]}
+                    maxTemp={maxTemp[index]}
+                    weather={weather[index]}
+                    key={index}
                   />
-                ) : (
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <CircularProgress size={30} color="info" />
-                  </Box>
-                )}
+                ))}
               </div>
+            <div className="forecast">
+              {data.length ? (
+                <HourlyForecast
+                  hourlyData={selectedHourlyData}
+                  dayIndex={dayIndex}
+                />
+              ) : (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <CircularProgress size={30} color="info" />
+                </Box>
+              )}
             </div>
           </div>
           <Footer />

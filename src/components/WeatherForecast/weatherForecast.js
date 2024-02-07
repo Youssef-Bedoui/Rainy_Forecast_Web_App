@@ -36,7 +36,7 @@ const WeatherForecast = ({
 
   return (
     <div onClick={handleClick} className={forecastCardClasses}>
-      <h3 className="day_forecast">{day}</h3>
+      <h3 className="day">{day}</h3>
       <div className="weather-info">
         <img src={icon} alt={weather} />
         <div className="temperature">
