@@ -53,7 +53,7 @@
   letter-spacing: 1px;
 }
 .lastUpdate {
-  font-weight: bold;
+  font-weight: 500;
   font-size: smaller;
   color: #fff;
   background-color: rgba(10, 32, 94, 0.747);
@@ -61,7 +61,7 @@
   margin: 0 !important;
   padding: 5px;
   text-indent: 5px;
-  border-radius: 30px;
+  border-radius: 10px;
 }
 .statis_card {
   width: 120px;
@@ -89,6 +89,15 @@
   font-size: 50px;
   font-weight: bold;
   color: rgb(255, 230, 0);
+}
+.MuiAlert-icon{
+  margin: 0 !important;
+
+  line-height: 40;
+}
+.MuiSvgIcon-root{
+  height: 40px !important;
+  width: 40px !important;
 }
 
 

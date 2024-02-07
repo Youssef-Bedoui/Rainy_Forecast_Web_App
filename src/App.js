@@ -26,52 +26,38 @@ function App() {
   const [dayIndex, setDayIndex] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [connecProb, setIsConnecProb] = useState(navigator.onLine);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
+  const searchCity = useCallback(async (city) => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  const searchCity = useCallback(
-    async (city) => {
-      try {
-        setLoading(true);
-        setIsError(false);
-        setLoadingTimedOut(false);
+      const response = await api.get(
+        `forecast.json?&key=${config.API_KEY}&q=${city}&days=3&lang=${i18n.resolvedLanguage}`
+      );
+      const responseData = response.data;
 
-        const response = await api.get(
-          `forecast.json?&key=${config.API_KEY}&q=${city}&days=3&lang=${i18n.resolvedLanguage}`
-        );
-        const responseData = response.data;
-
-        if (responseData) {
-          setLoading(false);
-          setData(responseData.forecast.forecastday);
-          setHourlyData(
-            responseData.forecast.forecastday.map((day) => day.hour)
-          );
-          setSelectedHourlyData(responseData.forecast.forecastday[0]?.hour);
-          setTemp(responseData.current.temp_c);
-          setError(null);
-          setCity(responseData.location.name);
-          localStorage.setItem("lastCity", responseData.location.name);
-        } else {
-          setLoading(false);
-          setData([]);
-          setTemp([]);
-          setError("error");
-          setIsError(true);
-        }
-      } catch (error) {
-        console.error(error);
+      if (responseData) {
         setLoading(false);
-        setIsError(true);
-        setLoadingTimedOut(true);
-        setIsConnecProb(true)
+        setData(responseData.forecast.forecastday);
+        setHourlyData(responseData.forecast.forecastday.map((day) => day.hour));
+        setSelectedHourlyData(responseData.forecast.forecastday[0]?.hour);
+        setTemp(responseData.current.temp_c);
+        setCity(responseData.location.name);
+        localStorage.setItem("lastCity", responseData.location.name);
+      } else {
+        setLoading(false);
+        setData([]);
+        setTemp([]);
+        setError("No data found.");
       }
-    },
-    [i18n.resolvedLanguage]
-  );
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      setError("Error fetching data.");
+    }
+  }, [i18n.resolvedLanguage]);
 
   const fetchUserCity = useCallback(async () => {
     setLoadingTimedOut(false);
@@ -94,78 +80,25 @@ function App() {
           const { state } = data[0];
           setCity(state);
           searchCity(state);
-          setLoading(false);
         }
       } else if (savedCity) {
         setCity(savedCity);
         searchCity(savedCity);
-        setLoading(false);
       } else {
-        console.error("Geolocation is not supported by this browser.");
-        setIsError(true);
-        setError("No internet connection.");
-        setLoading(false);
+        setError("Geolocation is not supported by this browser.");
       }
     } catch (error) {
       console.error("Error fetching user city:", error);
-      setError("Error fetching user city !");
-      setIsError(true);
+      setError("Error fetching user city!");
+    } finally {
       setLoading(false);
     }
   }, [searchCity]);
 
   useEffect(() => {
     Moment.locale("en");
-
     fetchUserCity();
-  }, [fetchUserCity, i18n.resolvedLanguage, searchCity]);
-
-  useEffect(() => {
-    function onlineHandler() {
-      setIsOnline(true);
-      setLoading(false);
-      setIsError(false);
-      setError(null);
-      setIsConnecProb(false);
-      fetchUserCity();
-    }
-
-    function offlineHandler() {
-      setIsOnline(false);
-      setLoading(false);
-      setIsError(true);
-      setError("No Connection");
-      setIsConnecProb(true);
-    }
-
-    window.addEventListener("online", onlineHandler);
-    window.addEventListener("offline", offlineHandler);
-
-    return () => {
-      window.removeEventListener("online", onlineHandler);
-      window.removeEventListener("offline", offlineHandler);
-    };
-  }, [data.length, fetchUserCity, isError]);
-
-  useEffect(() => {
-    if (city) {
-      searchCity(city);
-    }
-  }, [city, searchCity]);
-
-  const date = data.map((el) =>
-    Moment(el.date)
-      .locale(
-        moment.locale(
-          localStorage.getItem("i18nextLng") === "ar" ? "ar-tn" : "en"
-        )
-      )
-      .format("dddd DD")
-  );
-  const weather = data.map((el) => el.day.condition.text);
-  const minTemp = data.map((el) => parseInt(el.day.mintemp_c));
-  const maxTemp = data.map((el) => parseInt(el.day.maxtemp_c));
-  const icon = data.map((el) => el.day.condition.icon);
+  }, [fetchUserCity]);
 
   const getHourlyForecast = (index) => {
     setDayIndex(index);
@@ -176,11 +109,7 @@ function App() {
     <div className="App">
       <Navbar city={city} searchCity={searchCity} />
       {loadingTimedOut ? (
-        <Error
-          error="Loading timed out"
-          connecProb={connecProb}
-          fetch={fetchUserCity}
-        />
+        <Error error="Loading timed out" />
       ) : loading ? (
         <Box
           display="flex"
@@ -194,26 +123,25 @@ function App() {
         <div>
           <CurrentWeather city={city} temp={temp} />
           <div className="forecast_container">
-              <div className="day_forecast">
-                {date.map((day, index) => (
-                  <WeatherForecast
-                    onClick={getHourlyForecast}
-                    index={index}
-                    day={day}
-                    icon={icon[index]}
-                    minTemp={minTemp[index]}
-                    maxTemp={maxTemp[index]}
-                    weather={weather[index]}
-                    key={index}
-                  />
-                ))}
-              </div>
+            <div className="day_forecast">
+              {data.map((day, index) => (
+                <WeatherForecast
+                  onClick={getHourlyForecast}
+                  index={index}
+                  day={Moment(day.date)
+                    .locale(moment.locale(localStorage.getItem("i18nextLng") === "ar" ? "ar-tn" : "en"))
+                    .format("dddd DD")}
+                  icon={day.day.condition.icon}
+                  minTemp={parseInt(day.day.mintemp_c)}
+                  maxTemp={parseInt(day.day.maxtemp_c)}
+                  weather={day.day.condition.text}
+                  key={index}
+                />
+              ))}
+            </div>
             <div className="forecast">
               {data.length ? (
-                <HourlyForecast
-                  hourlyData={selectedHourlyData}
-                  dayIndex={dayIndex}
-                />
+                <HourlyForecast hourlyData={selectedHourlyData} dayIndex={dayIndex} />
               ) : (
                 <Box display="flex" justifyContent="center" alignItems="center">
                   <CircularProgress size={30} color="info" />

@@ -29,7 +29,9 @@ const CurrentWeather = ({ city }) => {
   const [feelsLike, setFeelsLike] = useState(null);
   const [refreshAlert, setRefreshAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
-  const [refreshErrorAlert, setRefreshErrorAlert] = useState(false); 
+  const [refreshErrorAlert, setRefreshErrorAlert] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true); // State to track initial load
+  const [dataLoaded, setDataLoaded] = useState(false); // State to track whether data is loaded
 
   const getCurrWeather = useCallback(async () => {
     try {
@@ -49,8 +51,12 @@ const CurrentWeather = ({ city }) => {
         setHumidity(data.humidity);
         setLastUpdate(data.last_updated);
         setErrorAlert(false);
-        setRefreshErrorAlert(false); 
-        handleAlertSuccess();
+        setRefreshErrorAlert(false);
+        // Check if it's not the initial load before showing refresh alert
+        if (!initialLoad) {
+          handleAlertSuccess();
+        }
+        setDataLoaded(true); // Mark data as loaded
       } else {
         setErrorAlert(true);
         handleRefreshError();
@@ -60,7 +66,7 @@ const CurrentWeather = ({ city }) => {
       handleRefreshError();
       console.log(error);
     }
-  }, [city, i18n.resolvedLanguage]);
+  }, [city, i18n.resolvedLanguage, initialLoad]);
 
   const handleAlertSuccess = () => {
     setRefreshAlert(true);
@@ -78,7 +84,9 @@ const CurrentWeather = ({ city }) => {
 
   useEffect(() => {
     getCurrWeather();
-  }, [getCurrWeather]);
+    // Set initial load to false after the first render
+    setInitialLoad(false);
+  }, [getCurrWeather, initialLoad]);
 
   return (
     <div className="weather-today">
@@ -90,15 +98,61 @@ const CurrentWeather = ({ city }) => {
             </p>
             <h2 className="text-left city_name m-0">
               {city}
-              <i
-                onClick={() => {
-                  getCurrWeather();
-                }}
-              >
-                <GrFormRefresh
-                  className={`refresh ${refreshAlert ? "rotating" : ""}`}
-                />
-              </i>
+              {dataLoaded && (
+                <i
+                  onClick={() => {
+                    getCurrWeather();
+                  }}
+                >
+                  <GrFormRefresh
+                    className={`refresh ${refreshAlert ? "rotating" : ""}`}
+                  />
+                </i>
+              )}
+              {refreshAlert && (
+                <Alert
+                  variant="filled"
+                  severity="success"
+                  iconMapping={{
+                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#1976D2",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "40px",
+                    width: "40px",
+                    position: "absolute",
+                    borderRadius: "100%",
+                    right: "10px",
+                    top: "30px",
+                  }}
+                ></Alert>
+              )}
+              {refreshErrorAlert && (
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  iconMapping={{
+                    error: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "red",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "40px",
+                    width: "40px",
+                    position: "absolute",
+                    borderRadius: "100%",
+                    right: "10px",
+                    top: "30px",
+                  }}
+                ></Alert>
+              )}
             </h2>
             <div className="d-flex flex-column justify-content-center align-items-center ">
               <motion.div
@@ -127,50 +181,7 @@ const CurrentWeather = ({ city }) => {
               <p className="lastUpdate">
                 {t("lastUpd")} : {Moment(lastUpdate).format("LLLL")}
               </p>
-              {refreshAlert && (
-                <Alert
-                  variant="filled"
-                  severity="success"
-                  iconMapping={{
-                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
-                  }}
-                  style={{
-                    backgroundColor: "#1976D2",
-                    color: "white",
-                    width: "fit-content",
-                    height: "30px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontWeight: "bold",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  {t("dataRefreshed")}
-                </Alert>
-              )}
-              {refreshErrorAlert && (
-                <Alert
-                  variant="filled"
-                  severity="error"
-                  iconMapping={{
-                    error: <CheckCircleOutlineIcon fontSize="inherit" />,
-                  }}
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                    width: "fit-content",
-                    height: "30px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontWeight: "bold",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  {t("refreshError")}
-                </Alert>
-              )}
+
               {errorAlert && !refreshErrorAlert && (
                 <Alert
                   variant="filled"
@@ -189,9 +200,7 @@ const CurrentWeather = ({ city }) => {
                     fontWeight: "bold",
                     letterSpacing: "1px",
                   }}
-                >
-                  {t("dataError")}
-                </Alert>
+                ></Alert>
               )}
             </div>
             <div className="d-flex flex-row justify-content-center align-items-center flex-wrap">

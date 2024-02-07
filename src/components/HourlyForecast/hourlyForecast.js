@@ -88,11 +88,11 @@ function HourlyForecast({ hourlyData, dayIndex }) {
             />
             <h6 className="hour_temp">{hour.temp_c} °C</h6>
             <h6 className="hour_temp">
-              {hour.wind_kph} {hour.wind_dir}
+              {hour.wind_kph} Kph - {hour.wind_dir}
             </h6>
             <h6 className="precip">
               {" "}
-              {hour.will_it_rain && (
+              {hour.will_it_rain === 1 && (
                 <img className="precip_icon" alt="rain" src={precip_icon} />
               )}
               {hour.chance_of_rain} %
