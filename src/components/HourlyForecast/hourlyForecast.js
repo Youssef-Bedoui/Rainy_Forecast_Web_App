@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./hourlyForecast.css";
 import Moment from "moment";
-import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import precip_icon from "../../assets/icons/icons8-heavy-rain-50.png";
 import time from "../../assets/icons/time.png";
 import cond from "../../assets/icons/cond.png";
@@ -10,12 +8,15 @@ import temp from "../../assets/icons/temp.png";
 import wind from "../../assets/icons/wind.png";
 import precip from "../../assets/icons/rain.png";
 import press from "../../assets/icons/press.png";
+import { useTranslation } from "react-i18next";
 
 function HourlyForecast({ hourlyData, dayIndex }) {
+  const { t, i18n } = useTranslation();
   const [filteredData, setFilteredData] = useState([]);
   const [scrollLeft, setScrollLeft] = useState(0); // Track scroll position
   const currentHourRef = useRef(null);
   const hourlyContainerRef = useRef(null); // Create a ref for the hourly container
+  console.log(hourlyData);
 
   useEffect(() => {
     // Filter the hourly data for the current day
@@ -37,17 +38,14 @@ function HourlyForecast({ hourlyData, dayIndex }) {
   };
 
   useEffect(() => {
-    if (currentHourRef.current) {
-      currentHourRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "start",
-      });
-    }
-  }, [filteredData]);
+    window.scroll("top", 0);
+  }, []);
 
   return (
-    <div className="position-relative">
+    <div
+      className="position-relative"
+      style={{ direction: i18n.resolvedLanguage === "ar" ? "rtl" : "ltr" }}
+    >
       <div className="hourly_header flex-row d-flex justify-content-around align-items-center text-center">
         <div className="header_item">
           <img className="header_icon" src={time} alt="Time" />
@@ -86,18 +84,24 @@ function HourlyForecast({ hourlyData, dayIndex }) {
               src={hour.condition.icon}
               alt={hour.condition.text}
             />
-            <h6 className="hour_temp">{hour.temp_c} °C</h6>
             <h6 className="hour_temp">
-              {hour.wind_kph} Kph - {hour.wind_dir}
+              {hour.temp_c} {t("c")}
+            </h6>
+            <h6 className="hour_temp">
+              {hour.wind_kph} {t("kph")}- {hour.wind_dir}
             </h6>
             <h6 className="precip">
-              {" "}
+              <span className="rain_mm">
+                {hour.precip_mm} {t("mm")}{" "}
+              </span>
               {hour.will_it_rain === 1 && (
                 <img className="precip_icon" alt="rain" src={precip_icon} />
               )}
               {hour.chance_of_rain} %
             </h6>
-            <h6>{hour.pressure_mb} mb</h6>
+            <h6>
+              {hour.pressure_mb} {t("mb")}
+            </h6>
           </div>
         ))}
       </div>

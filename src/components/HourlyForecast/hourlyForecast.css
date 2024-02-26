@@ -32,6 +32,10 @@
 .precip {
   color: aqua;
 }
+.precip .rain_mm{
+color: rgb(40, 214, 214);
+font-size: smaller;
+}
 .precip_icon {
   height: 20px;
   width: 20px;

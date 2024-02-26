@@ -15,7 +15,6 @@ function LanguageToggler() {
   };
 
   const handleLanguageToggle = (lang) => {
-    console.log(moment.locales(), "locallll");
     i18n.changeLanguage(lang);
   };
   useEffect(() => {

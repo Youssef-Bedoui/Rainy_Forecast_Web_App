@@ -30,7 +30,7 @@ const WeatherForecast = ({
   };
 
   // Define the CSS classes based on the clicked state
-  const forecastCardClasses = `forecast_card col-md-2 pt-1 ${
+  const forecastCardClasses = `forecast_card col-md-2 pt-1 text-center ${
     index === clickedIndex ? "clicked-day" : ""
   }`;
 
