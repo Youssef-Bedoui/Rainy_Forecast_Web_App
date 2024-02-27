@@ -22,10 +22,7 @@ function LanguageToggler() {
   }, []);
 
   return (
-    <div className="languageToggler ">
-      <i className="fs-2">
-        <IoLanguageSharp />
-      </i>
+    <div className="languageToggler">
       {Object.keys(languages).map((lang) => (
         <button
           type="submit"

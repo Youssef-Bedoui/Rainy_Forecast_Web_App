@@ -14,6 +14,7 @@ import "moment/locale/ar-tn";
 import moment from "moment";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import i18next from "i18next";
 
 function App() {
   const { i18n } = useTranslation();
@@ -28,36 +29,41 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
-  const searchCity = useCallback(async (city) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const searchCity = useCallback(
+    async (city) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      const response = await api.get(
-        `forecast.json?&key=${config.API_KEY}&q=${city}&days=3&lang=${i18n.resolvedLanguage}`
-      );
-      const responseData = response.data;
+        const response = await api.get(
+          `forecast.json?&key=${config.API_KEY}&q=${city}&days=3&lang=${i18n.resolvedLanguage}`
+        );
+        const responseData = response.data;
 
-      if (responseData) {
+        if (responseData) {
+          setLoading(false);
+          setData(responseData.forecast.forecastday);
+          setHourlyData(
+            responseData.forecast.forecastday.map((day) => day.hour)
+          );
+          setSelectedHourlyData(responseData.forecast.forecastday[0]?.hour);
+          setTemp(responseData.current.temp_c);
+          setCity(responseData.location.name);
+          localStorage.setItem("lastCity", responseData.location.name);
+        } else {
+          setLoading(false);
+          setData([]);
+          setTemp([]);
+          setError("No data found.");
+        }
+      } catch (error) {
+        console.error(error);
         setLoading(false);
-        setData(responseData.forecast.forecastday);
-        setHourlyData(responseData.forecast.forecastday.map((day) => day.hour));
-        setSelectedHourlyData(responseData.forecast.forecastday[0]?.hour);
-        setTemp(responseData.current.temp_c);
-        setCity(responseData.location.name);
-        localStorage.setItem("lastCity", responseData.location.name);
-      } else {
-        setLoading(false);
-        setData([]);
-        setTemp([]);
-        setError("No data found.");
+        setError("Error fetching data.");
       }
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-      setError("Error fetching data.");
-    }
-  }, [i18n.resolvedLanguage]);
+    },
+    [i18n.resolvedLanguage]
+  );
 
   const fetchUserCity = useCallback(async () => {
     setLoadingTimedOut(false);
@@ -120,7 +126,11 @@ function App() {
           <CircularProgress size={60} color="info" />
         </Box>
       ) : (
-        <div>
+        <div
+          style={{
+            direction: i18next.resolvedLanguage === "ar" ? "rtl" : "ltr",
+          }}
+        >
           <CurrentWeather city={city} temp={temp} />
           <div className="forecast_container">
             <div className="day_forecast">
@@ -129,7 +139,13 @@ function App() {
                   onClick={getHourlyForecast}
                   index={index}
                   day={Moment(day.date)
-                    .locale(moment.locale(localStorage.getItem("i18nextLng") === "ar" ? "ar-tn" : "en"))
+                    .locale(
+                      moment.locale(
+                        localStorage.getItem("i18nextLng") === "ar"
+                          ? "ar-tn"
+                          : "en"
+                      )
+                    )
                     .format("dddd DD")}
                   icon={day.day.condition.icon}
                   minTemp={parseInt(day.day.mintemp_c)}
@@ -139,9 +155,17 @@ function App() {
                 />
               ))}
             </div>
-            <div className="forecast">
+            <div
+              className="forecast"
+              style={{
+                direction: i18n.resolvedLanguage === "ar" ? "rtl" : "ltr",
+              }}
+            >
               {data.length ? (
-                <HourlyForecast hourlyData={selectedHourlyData} dayIndex={dayIndex} />
+                <HourlyForecast
+                  hourlyData={selectedHourlyData}
+                  dayIndex={dayIndex}
+                />
               ) : (
                 <Box display="flex" justifyContent="center" alignItems="center">
                   <CircularProgress size={30} color="info" />

@@ -31,6 +31,13 @@
 }
 .precip {
   color: aqua;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.will_rain{
+  background-color: rgba(60, 57, 240, 0.11);
+  backdrop-filter: blur(10px);
 }
 .precip .rain_mm{
 color: rgb(40, 214, 214);

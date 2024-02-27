@@ -27,10 +27,10 @@
   white-space: nowrap;
 }
 .min_temp {
-  color: #ff0000;
+  color:aqua ;
 }
 .max_temp {
-  color: aqua;
+  color:#ffbb00 ;
 }
 .min_temp,
 .max_temp {

@@ -218,8 +218,7 @@ const CurrentWeather = ({ city }) => {
                     alt={t("feels")}
                   />
                   <p className="weather_data">
-                    {feelsLike}
-                    {t("c")}
+                    {feelsLike} {t("c")}
                   </p>
                   <h6 className="detail_title">{t("feels")}</h6>
                 </motion.div>
@@ -236,8 +235,7 @@ const CurrentWeather = ({ city }) => {
                     alt={t("precip")}
                   />
                   <p className="weather_data">
-                    {precip}
-                    {t("mm")}
+                    {precip} {t("mm")}
                   </p>
                   <h6 className="detail_title">{t("precip")}</h6>
                 </motion.div>
@@ -254,10 +252,9 @@ const CurrentWeather = ({ city }) => {
                     alt={t("windSpd")}
                   />
                   <p className="weather_data">
-                    {windSpd}
-                    {t("kph")}
+                    {windSpd} {t("kph")}
                   </p>
-                  <h6 className="detail_title">{t("windSpd")}</h6>
+                  <h6 className="detail_title"> {t("windSpd")}</h6>
                 </motion.div>
                 <motion.div
                   key="wind-direction"
@@ -272,7 +269,7 @@ const CurrentWeather = ({ city }) => {
                     alt={t("windDrc")}
                   />
                   <p className="weather_data">{windDir}</p>
-                  <h6 className="detail_title">{t("windDrc")}</h6>
+                  <h6 className="detail_title"> {t("windDrc")}</h6>
                 </motion.div>
                 <motion.div
                   key="pressure"
@@ -287,8 +284,7 @@ const CurrentWeather = ({ city }) => {
                     alt={t("press")}
                   />
                   <p className="weather_data">
-                    {pression}
-                    {t("mb")}
+                    {pression} {t("mb")}
                   </p>
                   <h6 className="detail_title">{t("press")}</h6>
                 </motion.div>
@@ -304,7 +300,7 @@ const CurrentWeather = ({ city }) => {
                     src={humImg}
                     alt={t("humd")}
                   />
-                  <p className="weather_data">{humidity}%</p>
+                  <p className="weather_data">{humidity} %</p>
                   <h6 className="detail_title">{t("humd")}</h6>
                 </motion.div>
               </AnimatePresence>

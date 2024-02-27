@@ -68,13 +68,13 @@ function HourlyForecast({ hourlyData, dayIndex }) {
       </div>
       <div
         className="hourly_container flex-column d-flex justify-content-start align-items-start"
-        ref={hourlyContainerRef} // Attach the ref to the hourly container
+        ref={hourlyContainerRef}
       >
         {filteredData?.map((hour, index) => (
           <div
             className={`hour_card d-flex justify-content-around align-items-center mx-3 ${
               isCurrentHour(hour) && "current_hour"
-            }`}
+            } ${hour.will_it_rain === 1 && "will_rain"}`}
             ref={isCurrentHour(hour) ? currentHourRef : null}
             key={index}
           >
@@ -84,20 +84,22 @@ function HourlyForecast({ hourlyData, dayIndex }) {
               src={hour.condition.icon}
               alt={hour.condition.text}
             />
-            <h6 className="hour_temp">
-              {hour.temp_c} {t("c")}
-            </h6>
+            <h6 className="hour_temp">{hour.temp_c} °</h6>
             <h6 className="hour_temp">
               {hour.wind_kph} {t("kph")}- {hour.wind_dir}
             </h6>
             <h6 className="precip">
-              <span className="rain_mm">
-                {hour.precip_mm} {t("mm")}{" "}
+              <span>
+                {hour.will_it_rain === 1 && (
+                  <img className="precip_icon" alt="rain" src={precip_icon} />
+                )}
               </span>
-              {hour.will_it_rain === 1 && (
-                <img className="precip_icon" alt="rain" src={precip_icon} />
-              )}
-              {hour.chance_of_rain} %
+              <div className="d-flex flex-column justify-content-center">
+                <span className="rain_mm">
+                  {hour.precip_mm} {t("mm")}
+                </span>
+                <span>{hour.chance_of_rain} %</span>
+              </div>
             </h6>
             <h6>
               {hour.pressure_mb} {t("mb")}

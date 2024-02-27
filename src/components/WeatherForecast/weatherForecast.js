@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useEffect } from "react";
 import "./weatherForeact.css";
 import { useTranslation } from "react-i18next";
 
@@ -12,37 +12,36 @@ const WeatherForecast = ({
   weather,
 }) => {
   const { t } = useTranslation();
-
-  // State to track the index of the currently clicked day
-  const [clickedIndex, setClickedIndex] = useState(0);
+  const forecastRef = useRef(null);
 
   const handleClick = () => {
     onClick(index);
-
-    // Check if the clicked day is the same as the previously clicked day
-    if (index === clickedIndex) {
-      // If it's the same, unselect it by setting clickedIndex to null
-      setClickedIndex(null);
-    } else {
-      // If it's different, update clickedIndex with the new index
-      setClickedIndex(index);
+    const clickedDay = document.querySelector(".clicked-day");
+    if (clickedDay) {
+      clickedDay.classList.remove("clicked-day");
     }
+
+    forecastRef.current.classList.add("clicked-day");
   };
 
-  // Define the CSS classes based on the clicked state
-  const forecastCardClasses = `forecast_card col-md-2 pt-1 text-center ${
-    index === clickedIndex ? "clicked-day" : ""
-  }`;
+  useEffect(() => {
+    if (index === 0 && forecastRef.current) {
+      forecastRef.current.classList.add("clicked-day");
+    }
+  }, []);
 
   return (
-    <div onClick={handleClick} className={forecastCardClasses}>
+    <div
+      ref={forecastRef}
+      onClick={handleClick}
+      className="forecast_card col-md-2 pt-1 text-center"
+    >
       <h3 className="day">{day}</h3>
       <div className="weather-info">
         <img src={icon} alt={weather} />
         <div className="temperature">
           <span className="min_temp">
-            {minTemp}
-            {t("c")}
+            {minTemp} {t("c")}
           </span>{" "}
           <span className="max_temp">
             / {maxTemp} {t("c")}

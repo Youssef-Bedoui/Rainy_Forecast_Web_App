@@ -5,22 +5,13 @@
   cursor: pointer;
   font-size: 25px;
   color: #000000;
-  background-color: #617f97;
+  background-color: #112631;
   width: fit-content;
   padding: 0 3px;
   border-radius: 5px;
   margin-right: 5px;
 }
-.languageToggler:hover,
-.languageTogglerText:hover {
-  color: orange;
-  transition: 0.3s ease;
-}
 
-.languageTogglerIcon {
-  font-size: 20px;
-  
-}
 
 .languageTogglerText {
   font-size: 20px;
@@ -31,7 +22,7 @@
   padding: 0 10px;
 }
 .disabledToggler {
-  color: #000000;
+  color: aqua;
   font-size: 20px;
   font-weight: bold;
   background-color: transparent !important;
